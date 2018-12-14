@@ -1,3 +1,74 @@
+
+# 分析流程
+
+## Preprocess [EDA&Extract.ipynb](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/EDA%26Extract.ipynb)
+
+1. [preprocess/parse_html.py](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/parse_html.py)
+    > 过滤 html tag 【python2】
+
+2. [preprocess/generate_text_feature.py](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/generate_text_feature.py)
+    > 生成csv特征  
+    
+3. [preprocess/cut_word.py](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/cut_word.py)
+    > 生成分词后的txt  
+
+4. [preprocess/train_tfidf.py](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/train_tfidf.py)
+    > 提取TFIDF特征 + SVD降维  
+    > data/make_pipeline.pkl  
+    > data/train_x_250.pkl  
+
+5. [preprocess/process_features.py](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/process_features.py)
+    > 提取TF-IDF的特征
+    > 利用训练好的TFIDF+SVD模型来处理我们的测试文本
+
+4. [ocr/demo.py](https://github.com/orikon/SOHU_competition/blob/master/src/ocr/demo.py)
+    > OCR文字识别
+
+5. [preprocess/ocr_features.py](https://github.com/orikon/SOHU_competition/blob/master/src/preprocess/ocr_features.py)
+    > 整合OCR News_ocr_train_to_text.txt & News_ocr_test_to_text.txt
+
+6. 再次处理整合后的文本
+```
+os.system('python3 generate_text_feature.py News_ocr_train_to_text.txt')
+os.system('python3 cut_word.py News_ocr_train_to_text.txt')
+os.system('python3 process_features.py ocr_train')
+
+# 需要把测试集的图片放在相应的位置然后使用
+os.system('python3 generate_text_feature.py News_ocr_test_to_text.txt')
+os.system('python3 cut_word.py News_ocr_test_to_text.txt')
+os.system('python3 process_features.py ocr_test')
+```
+
+## Feature Extraction [train&predict.ipynb](https://github.com/orikon/SOHU_competition/blob/master/src/train%26predict.ipynb)
+
+    # 把model目录下的py都import了，直接在ipynb运算
+    from config import Config
+    
+## Stacking [stacking.ipynb](https://github.com/orikon/SOHU_competition/blob/master/src/stacking.ipynb)
+
+在stacking第二层模型中我们还加入了深度融合的方法，[论文地址](https://arxiv.org/abs/1704.00109)
+
+* TRAIN_X = '../data/All_cut_train_text.txt'
+* TEXT_X = '../data/' + 'News_cut_test_text.txt'
+
+```
+# 第一次stacking
+the kflod cv is :  0.7423267326732673
+total scores is  0.7366749174917492
+
+# 使用pseudo-labeling做第二次stacking
+the kflod cv is :  0.7402870576589953
+total scores is  0.7374167982446459
+
+# save data/pickle.pkl
+
+print(count_one) --> 3
+print(count_one / len(results)) --> 0.08571428571428572
+print(count_zero / len(results)) --> 0.6571428571428571
+print(count_two / len(results)) --> 0.2571428571428571
+
+```
+
 # 简介
 第二届搜狐内容识别大赛冠军LuckyRabbit团队的解决方案，关于参赛细节和详解，请参阅[说明文档](https://blog.csdn.net/qq_34695147/article/details/81006059)
 ## 代码流程
