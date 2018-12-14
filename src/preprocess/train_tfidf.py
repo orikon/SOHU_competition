@@ -9,6 +9,7 @@
 
 
 import pickle
+#将术语频率逆序文档频率归一化为发生次数的稀疏矩阵。
 from sklearn.feature_extraction.text import (
     TfidfVectorizer)
 #SVD：Singular Value Decomposition，奇异值分解，是线性代数中一种重要的矩阵分解，它总能找到标准化正交基后方差最大的维度，因此用它进行降维去噪。
