@@ -46,6 +46,6 @@ class AttentionModel(BasicModel):
         x = Dropout(0.5)(all_views)
         dense2 = Dense(3, activation="softmax")(x)
         res_model = Model(inputs=[main_input, ocr_input], outputs=dense2)
-        plot_model(model, to_file="model.png", show_shapes=True)
+        # plot_model(model, to_file="model.png", show_shapes=True)
         # res_model = Model(inputs=[main_input], outputs=main_output)
         return res_model
