@@ -11,7 +11,8 @@ import pickle
 from keras.models import *
 from model.snapshot import SnapshotCallbackBuilder
 from sklearn.model_selection import KFold
-
+from keras import optimizers
+import os
 
 
 class BasicModel:
