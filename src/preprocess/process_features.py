@@ -65,8 +65,8 @@ if __name__ == '__main__':
     print('--------> begin save test_features')
     for id in tqdm.tqdm(test_ids):
         tmp = list(df_test.loc[df_test.id == id].values[0])
-        assert tmp[6][0] == 'D', print('something wrong during del features')
-        del tmp[6]
+        assert tmp[0][0] == 'D', print('something wrong during del features')
+        del tmp[0]
         test_features.append(tmp)
 
     assert len(test_features) == len(test_ids)
